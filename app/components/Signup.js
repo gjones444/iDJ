@@ -36,6 +36,7 @@ class Sign_up extends Component {
   render() {
     return (
        <div className="text-center">
+       <Header/>
          <h4>Enter Your New Username and Password Below</h4>
         <div className="center-block" id="Sign_up_div">
           <form id="sign-in-form" onSubmit={this.registration.bind(this)}>

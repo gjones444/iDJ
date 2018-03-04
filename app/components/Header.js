@@ -9,9 +9,10 @@ export default class Nav extends Component {
   render() {
     return (
       <nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Logo</a>
-      <ul id="nav" class="right">
+    <div className="nav-wrapper">
+      <a href="#" className="brand-logo">Logo</a>
+      <ul id="nav" className="right">
+      <li><a href="/">Home</a></li>
         <li><a href="#">Login</a></li>
         <li><a href="/signup">Signup</a></li>
       </ul>

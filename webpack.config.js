@@ -1,54 +1,31 @@
-'use strict';
+module.exports = {
 
-const env = process.env.NODE_ENV || 'development';
+  // This is the entry point or start of our react applicaton
+  entry: "./app/app.js",
 
-const webpack = require('webpack');
-const path = require('path');
-const webpackUMDExternal = require('webpack-umd-external');
-
-const pluginsList = [];
-const outputFileName = env === 'production' ?
-  'react-soundplayer.min.js' :
-  'react-soundplayer.js';
-
-if (env === 'production') {
-  pluginsList.push(
-    new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: false },
-      output: { comments: false }
-    })
-  );
-}
-
-const config = {
-  entry: path.join(__dirname, './index.js'),
-
+  // The plain compiled Javascript will be output into this file
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: outputFileName,
-    library: 'ReactSoundplayer',
-    libraryTarget: 'umd',
-    umdNamedDefine: true
+    filename: "./public/bundle/bundle.js"
   },
 
-  externals: webpackUMDExternal({
-    'react': 'React',
-    'soundcloud-audio': 'SoundCloudAudio'
-  }),
-
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
-
-  plugins: pluginsList,
-
+  // This section desribes the transformations we will perform
   module: {
-    rules: [{
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader'
-    }]
-  }
+    loaders: [
+      {
+        // Only working with files that in in a .js or .jsx extension
+        test: /\.jsx?$/,
+        // Webpack will only process files in our app folder. This avoids processing
+        // node modules and server files unnecessarily
+        include: /app/,
+        loader: "babel-loader",
+        query: {
+          // These are the specific transformations we'll be using.
+          presets: ["react", "es2015"]
+        }
+      }
+    ]
+  },
+  // This lets us debug our react code in chrome dev tools. Errors will have lines and file names
+  // Without this the console says all errors are coming from just coming from bundle.js
+  devtool: 'inline-source-map'
 };
-
-module.exports = config;
