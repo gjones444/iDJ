@@ -4,7 +4,9 @@
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "start": "node ./app/server/server.js"
+    "start": "node ./app/server/server.js",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -25,7 +27,10 @@
     "react-router-dom": "^4.2.2",
     "react-soundplayer": "^1.0.4",
     "sequelize": "^4.34.1",
-    "soundcloud": "^3.3.0"
+    "soundcloud": "^3.3.0",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.9",
+    "webpack-umd-external": "^1.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.3.13",

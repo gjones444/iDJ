@@ -4,7 +4,6 @@ import axios from 'axios';
 import Playlist from './Playlist';
 import Header from './Header';
 
-
 export default class Home extends Component {
   constructor(props) {
       super(props);
