@@ -30,28 +30,39 @@ export default class Playlist extends Component {
       });
     }
 
-    getSongById(id){
-  var id = this.value;
-  var promise = new Promise(function(resolve, reject){
-  SC.get('/tracks/' + id).then(function(response) {
-      resolve(response);
-    });
-  });
-  return promise;
+showPlaylist(){
+  axios.get('/api/playlist/').then(results => {
+    console.log(results)
+  })
 }
+
+
+  // $.ajax({
+	// 	method: 'GET',
+	// 	url: '/api/playlist'
+	// }).then(function(x){
+	// 	console.log(x)
+		// var newRow, numTd, artistTd, titleTd;
+		// for(var i = 0; i < results.songs.length; i++){
+		// 	newRow = $('<tr class="song-row" data-song_name=' + results.songs[i].song_name.split(" ").join("+").toLowerCase() +'>')
+		// 	numTd = $('<td>');
+		// 	artistTd = $('<td>');
+		// 	titleTd = $('<td>');
+    //
+		// 	numTd.text(i + 1);
+		// 	artistTd.text(results.songs[i].song_artist);
+		// 	titleTd.text(results.songs[i].song_name);
+		// 	newRow.append(numTd).append(artistTd).append(titleTd);
+		// 	$('#tbody').append(newRow)
+		// }
+	// });
+
 
   render(){
 
     return(
       <div className="container">
-        <div className="row">
-          <div className="col s12 board" id="table-style">
-            <table id="simple-board">
-               <tbody>
-               </tbody>
-             </table>
-          </div>
-        </div>
+        <a onClick={this.addToPlaylist.bind(this)} className="waves-effect waves-light btn">Test</a>
       </div>
     )
   }

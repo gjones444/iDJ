@@ -1,3 +1,24 @@
+var pg = require('pg');
+var express = require('express');
+var path = require('path');
+var router = express.Router();
+var dbUrl;
+
+if(process.env.DATABASE_URL){
+	dbUrl = process.env.DATABASE_URL
+} else {
+	dbUrl = {
+		user: process.argv.POSTGRES_USER,
+		password: process.argv.POSTGRES_PASSWORD,
+		database: 'iDJ',
+		host: 'localhost',
+		port: 5432
+	}
+}
+
+var pgClient = new pg.Client(dbUrl);
+pgClient.connect();
+
 var path = require('path');
 
 var LocalStrategy = require('passport-local').Strategy;
@@ -61,6 +82,32 @@ module.exports = (app, passport) => {
 			res.status(204).send();
 		});
 	});
+
+	app.get('/api/playlist/', (req,res) => {
+		var songs = `SELECT * FROM "added_songs"`;
+	  pgClient.query(songs, (error,queryRes) => {
+			if(error){
+				console.log("Did not work")
+				res.json({error: error})
+			} else {
+				res.json({playlist: queryRes})
+			}
+		});
+	});
+
+
+	app.post('/api/add-song', (req,res) => {
+		console.log(req.body)
+		var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
+		pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count]);
+	});
+
+	app.post('/api/vote-up-down', (req,res) => {
+		console.log(req.body)
+		var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
+		pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count]);
+	});
+
 
 	app.get('*', function(req,res){
 		res.sendFile(path.join(__dirname, './../../../public/index.html'));

@@ -10,7 +10,6 @@ export default class Home extends Component {
       super(props);
       this.state = {
         songList: [],
-        canal: undefined,
         index: 0,
         voteIndex: 0
       };
@@ -50,10 +49,55 @@ export default class Home extends Component {
     SC.get('/tracks/',{
 			q: searchResult
 		}).then((results) => {
-        console.log(results);
         this.setState({
           songList: results
         });
+    })
+  }
+
+  addToPlaylist(){
+    axios.post('/api/add-song/',{
+        song: this.state.songList[this.state.index].title,
+        song_id: this.state.songList[this.state.index].id,
+        uri: this.state.songList[this.state.index].uri,
+        artwork: this.state.songList[this.state.index].artwork_url,
+        votes_count: this.state.songList[this.state.index].voteIndex
+      }).then(function (response)
+      {
+      console.log("This works")
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  showPlaylist(){
+    axios.get('/api/playlist/').then(results => {
+      console.log(results.data.playlist.rows[0].song)
+      return (
+          <div>
+          <table>
+          <tbody>
+              <tr>
+                <th>Index</th>
+                <th>Song Title</th>
+                <th>Vote Up</th>
+                <th>Vote Down</th>
+                <th>Vote Count</th>
+              </tr>
+              <tr>
+                <td>{index}</td>
+                <td>{results.data.playlist.rows[0].song}</td>
+                <td><button onClick={this.upVote.bind(this)}>Up</button></td>
+                <td><button onClick={this.downVote.bind(this)}>Down</button></td>
+                <td><button onClick={this.goPlay.bind(this)}>Play</button></td>
+                <td>{voteIndex}</td>
+              </tr>
+              </tbody>
+            </table>
+        </div>
+      )
     })
   }
 
@@ -64,13 +108,14 @@ export default class Home extends Component {
     }
 
   render() {
-    const {songList, index, canal, voteIndex} = this.state;
+    const {songList, index, voteIndex} = this.state;
     const searchedSongs = () => {
       if(songList && songList.length > 0){
         return(
           <div>
           <span>
-            <li><img src={songList[index].artwork_url}></img>   Title: {songList[index].title} <button>Add to playlist</button></li>
+            <li><img src={songList[0].artwork_url}></img>   Title: {songList[0].title} <button onClick={this.addToPlaylist.bind(this)}>Add to playlist</button></li>
+            <li><img src={songList[1].artwork_url}></img>   Title: {songList[1].title} <button onClick={this.showPlaylist.bind(this)}>Zzzzzzzzzzzz</button></li>
           </span>
           </div>
         )
@@ -95,6 +140,7 @@ export default class Home extends Component {
                     <td>{songList[index].title}</td>
                     <td><button onClick={this.upVote.bind(this)}>Up</button></td>
                     <td><button onClick={this.downVote.bind(this)}>Down</button></td>
+                    <td><button onClick={this.goPlay.bind(this)}>Play</button></td>
                     <td>{voteIndex}</td>
                   </tr>
                   </tbody>
@@ -145,11 +191,9 @@ export default class Home extends Component {
         <div>
         </div>
           <div>
-            {searchedSongs()}
+          {searchedSongs()}
             <p>Playlist Queue</p>
-            {/*showNextBtn()}
-            {showPrevBtn()}
-            {playBtn()*/}
+            {showSongs()}
         </div>
       </div>
     );
