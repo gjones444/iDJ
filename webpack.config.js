@@ -1,11 +1,11 @@
 module.exports = {
 
   // This is the entry point or start of our react applicaton
-  entry: "./app/app.js",
+  entry: "./client/app/app.js",
 
   // The plain compiled Javascript will be output into this file
   output: {
-    filename: "./public/bundle/bundle.js"
+    filename: "./client/public/bundle/bundle.js"
   },
 
   // This section desribes the transformations we will perform

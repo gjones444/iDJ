@@ -35,7 +35,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static('./public'));
+app.use(express.static('./client/public'));
 
 require('./controllers/passport.js')(passport);
 require('./controllers/routes.js')(app, passport);

@@ -27,7 +27,7 @@ var bcrypt = require('bcrypt-nodejs');
 module.exports = (app, passport) => {
 
 	app.get('/', function(req,res){
-		res.sendFile(path.join(__dirname, './../../index.html'));
+		res.sendFile(path.join(__dirname, './../../client/public/index.html'));
 	});
 
 	app.get('/api/sign-up', function(req,res){
@@ -110,7 +110,7 @@ module.exports = (app, passport) => {
 
 
 	app.get('*', function(req,res){
-		res.sendFile(path.join(__dirname, './../../../public/index.html'));
+		res.sendFile(path.join(__dirname, './../../client/public/index.html'));
 	});
 
 }
