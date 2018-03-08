@@ -1,0 +1,21 @@
+/* Home Page */
+h1 {
+	color: blue;
+}
+
+#table-style{
+	border-style: dashed;
+	color: red
+}
+
+.nav-wrapper{
+	background-color: orange
+}
+
+#register-btn {
+	background-color: gold
+}
+
+.Table-headers {
+	
+}
