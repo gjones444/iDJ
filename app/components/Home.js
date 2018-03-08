@@ -11,32 +11,10 @@ export default class Home extends Component {
       this.state = {
         songList: [],
         index: 0,
-        voteIndex: 0
+        playlist_db: []
       };
   }
 
-  nextClick(){
-    this.setState({
-      index: this.state.index + 1
-    })
-  }
-  prevClick(){
-    this.setState({
-      index: this.state.index - 1
-    })
-  }
-
-  upVote(){
-    this.setState({
-      voteIndex: this.state.voteIndex + 1
-    })
-  }
-
-  downVote(){
-    this.setState({
-      voteIndex: this.state.voteIndex - 1
-    })
-  }
 
   componentWillMount(){
     SC.initialize({
@@ -55,122 +33,42 @@ export default class Home extends Component {
     })
   }
 
+  showPlaylist(){
+    axios({
+      method: 'get',
+      url: '/api/playlist/'
+    }).then((response) => {
+      console.log(response)
+          this.setState({
+            playlist_db: response.data.playlist.rows
+          });
+      })
+
+  }
   addToPlaylist(){
-    axios.post('/api/add-song/',{
+    axios.post('/api/vote-up-down/'+ 30,{
         song: this.state.songList[this.state.index].title,
         song_id: this.state.songList[this.state.index].id,
         uri: this.state.songList[this.state.index].uri,
         artwork: this.state.songList[this.state.index].artwork_url,
-        votes_count: this.state.songList[this.state.index].voteIndex
-      }).then(function (response)
-      {
-      console.log("This works")
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+        votes_count: 0
+      })
   }
 
-  showPlaylist(){
-    axios.get('/api/playlist/').then(results => {
-      console.log(results.data.playlist.rows[0].song)
-      return (
-          <div>
-          <table>
-          <tbody>
-              <tr>
-                <th>Index</th>
-                <th>Song Title</th>
-                <th>Vote Up</th>
-                <th>Vote Down</th>
-                <th>Vote Count</th>
-              </tr>
-              <tr>
-                <td>{index}</td>
-                <td>{results.data.playlist.rows[0].song}</td>
-                <td><button onClick={this.upVote.bind(this)}>Up</button></td>
-                <td><button onClick={this.downVote.bind(this)}>Down</button></td>
-                <td><button onClick={this.goPlay.bind(this)}>Play</button></td>
-                <td>{voteIndex}</td>
-              </tr>
-              </tbody>
-            </table>
-        </div>
-      )
-    })
-  }
 
-    goPlay(){
-         SC.stream('/tracks/' + this.state.songList[this.state.index].id).then(function(player){
-           player.play();
-         });
-    }
+
+
+
 
   render() {
-    const {songList, index, voteIndex} = this.state;
+    const {songList, index, voteIndex, playlist_db} = this.state;
     const searchedSongs = () => {
       if(songList && songList.length > 0){
         return(
           <div>
           <span>
             <li><img src={songList[0].artwork_url}></img>   Title: {songList[0].title} <button onClick={this.addToPlaylist.bind(this)}>Add to playlist</button></li>
-            <li><img src={songList[1].artwork_url}></img>   Title: {songList[1].title} <button onClick={this.showPlaylist.bind(this)}>Zzzzzzzzzzzz</button></li>
           </span>
-          </div>
-        )
-      }
-    }
-
-    const showSongs = () => {
-        if(songList && songList.length > 0){
-          return (
-              <div>
-              <table>
-              <tbody>
-                  <tr>
-                    <th>Index</th>
-                    <th>Song Title</th>
-                    <th>Vote Up</th>
-                    <th>Vote Down</th>
-                    <th>Vote Count</th>
-                  </tr>
-                  <tr>
-                    <td>{index}</td>
-                    <td>{songList[index].title}</td>
-                    <td><button onClick={this.upVote.bind(this)}>Up</button></td>
-                    <td><button onClick={this.downVote.bind(this)}>Down</button></td>
-                    <td><button onClick={this.goPlay.bind(this)}>Play</button></td>
-                    <td>{voteIndex}</td>
-                  </tr>
-                  </tbody>
-                </table>
-            </div>
-          )
-        }
-    }
-
-    const showPrevBtn = () => {
-      if(index >= 1){
-        return (
-          <a onClick={this.prevClick.bind(this)} className="waves-effect waves-light btn">Previous</a>
-        )
-      }
-    }
-
-    const showNextBtn = () => {
-      if(songList && (songList.length > 0) && (index < (songList.length - 1))){
-        return (
-          <a onClick={this.nextClick.bind(this)} className="waves-effect waves-light btn">Next</a>
-        )
-      }
-    }
-
-    const playBtn = () => {
-      if(songList && (songList.length > 0) && (index < (songList.length - 1))){
-        return (
-          <div>
-          <a onClick={this.goPlay.bind(this)} className="waves-effect waves-light btn">Play</a>
           </div>
         )
       }
@@ -193,7 +91,7 @@ export default class Home extends Component {
           <div>
           {searchedSongs()}
             <p>Playlist Queue</p>
-            {showSongs()}
+            <Playlist/>
         </div>
       </div>
     );

@@ -102,11 +102,15 @@ module.exports = (app, passport) => {
 		pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count]);
 	});
 
-	app.post('/api/vote-up-down', (req,res) => {
+	app.put('/api/vote-up-down/:id', (req,res) => {
 		console.log(req.body)
-		var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
-		pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count]);
+	pgClient.query('UPDATE "added_songs" SET votes_count=$1 WHERE id=' + req.params.id, [req.body.votectn], (err,results) => {
+		if(err){
+			res.json(err)
+		}
+		res.json({voteUpdated: "Success"})
 	});
+});
 
 
 	app.get('*', function(req,res){
