@@ -58,7 +58,7 @@ module.exports = (app, passport) => {
 		      	return next(err);
 		    }
 		    if (!user) {
-		    	return res.json({ success : false, message : 'authentication failed', info: info });
+		    	return res.status(401).json({ success : false, message : 'authentication failed', info: info });
 		    }
 		    req.login(user, function(err){
 				if(err){
@@ -98,18 +98,21 @@ module.exports = (app, passport) => {
 
 	app.post('/api/add-song', (req,res) => {
 		var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
-		pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count]);
-		var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
-	  pgClient.query(songs, (error,queryRes) => {
-			if(error){
-				console.log("Did not work")
-				res.json({error: error})
-			} else {
-				res.json({playlist: queryRes})
+		pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count], (err,results) => {
+			if(err){
+				res.json(err)
 			}
+			var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
+		  pgClient.query(songs, (error,queryRes) => {
+				if(error){
+					console.log("Did not work")
+					res.json({error: error})
+				} else {
+					res.json({playlist: queryRes})
+				}
+			})
 		})
-	});
-
+	})
 
 	app.put('/api/vote-up-down/:id', (req,res) => {
 	pgClient.query('UPDATE "added_songs" SET votes_count=$1 WHERE id=' + req.params.id, [req.body.voteCtn], (err,results) => {

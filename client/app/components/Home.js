@@ -16,7 +16,6 @@ export default class Home extends Component {
       };
   }
 
-
   componentWillMount(){
     SC.initialize({
       client_id: 'ebe2d1362a92fc057ac484fcfb265049'
@@ -36,6 +35,17 @@ export default class Home extends Component {
         }
       }
     });
+    
+    {
+      axios({
+        method: 'get',
+        url: '/api/playlist/'
+      }).then((response) => {
+            this.setState({
+              playlist_db: response.data.playlist.rows
+            })
+        })
+    };
   }
 
   searchSong(){
@@ -49,32 +59,32 @@ export default class Home extends Component {
     })
   }
 
-  showPlaylist(){
-    axios({
-      method: 'get',
-      url: '/api/playlist/'
-    }).then((response) => {
-      console.log(response)
-          this.setState({
-            playlist_db: response.data.playlist.rows
-          });
-      })
-
-  }
-
-  addToPlaylist(){
+  addToPlaylist(id){
+    let playlist_db_item = this.state.playlist_db.filter(item => item.id == id)
       axios.post('/api/add-song',{
           song: this.state.songList[this.state.index].title,
           song_id: this.state.songList[this.state.index].id,
           uri: this.state.songList[this.state.index].uri,
           artwork: this.state.songList[this.state.index].artwork_url,
           votes_count: 0
-        })
-        console.log("Song Added")
-    }
-
-
-
+        }).then((results) => {
+          console.log(results)
+          this.setState({
+            playlist_db: results.data.playlist.rows
+          });
+        }) 
+    } 
+    
+    // downVote(id){
+    //   let playlist_db_item = this.state.playlist_db.filter(item => item.id == id)
+    //   axios.put('/api/vote-up-down/' + id,{
+    //     voteCtn: playlist_db_item[0].votes_count - 1
+    //     }).then((results) => {
+    //       this.setState({
+    //         playlist_db: results.data.playlist.rows
+    //       })
+    //     })    
+    // }
 
   render() {
     const {songList, index, voteIndex, playlist_db, signedIn} = this.state;
@@ -83,7 +93,7 @@ export default class Home extends Component {
         return(
           <div>
           <span>
-            <li><img src={songList[0].artwork_url}></img>   Title: {songList[0].title} <button onClick={this.addToPlaylist.bind(this)}>Add to playlist</button></li>
+            <li><img src={songList[0].artwork_url}></img>   Title: {songList[0].title} <button onClick={() => this.addToPlaylist()}>Add to playlist</button></li>
           </span>
           </div>
         )
@@ -107,7 +117,7 @@ export default class Home extends Component {
           <div>
           {searchedSongs()}
             <p>Playlist Queue</p>
-            <Playlist/>
+            <Playlist playlist_db={this.state.playlist_db}/>
         </div>
       </div>
     );
