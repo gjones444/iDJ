@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 var Link = require("react-router-dom").Link;
 
-
 import Header from './Header';
 import Logout from './Logout';
 import Home from './Home';

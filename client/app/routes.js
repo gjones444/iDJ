@@ -1,4 +1,9 @@
 import React from "react";
+//imported the react-router
+/*
+	No more backend routes to connect to your front end files
+	All front end routes are now done strictly on the front end, through react
+*/
 import { Switch, Route } from "react-router-dom";
 
 
