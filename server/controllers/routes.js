@@ -22,7 +22,7 @@ pgClient.connect();
 var path = require('path');
 
 var LocalStrategy = require('passport-local').Strategy;
-var bcrypt = require('bcrypt-nodejs');
+var bcrypt = require('bcryptjs');
 
 module.exports = (app, passport) => {
 
@@ -58,7 +58,7 @@ module.exports = (app, passport) => {
 		      	return next(err);
 		    }
 		    if (!user) {
-		    	return res.json({ success : false, message : 'authentication failed', info: info });
+		    	return res.status(401).json({ success : false, message : 'authentication failed', info: info });
 		    }
 		    req.login(user, function(err){
 				if(err){
@@ -82,6 +82,8 @@ module.exports = (app, passport) => {
 			res.status(204).send();
 		});
 	});
+
+
 
 	app.get('/api/playlist/', (req,res) => {
 		var songs = `SELECT * FROM "added_songs"`;

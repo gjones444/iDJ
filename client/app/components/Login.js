@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 var Link = require("react-router-dom").Link;
+
+
 import Header from './Header';
 import Logout from './Logout';
 import Home from './Home';
@@ -28,10 +30,11 @@ export default class Log_in extends Component {
             if(response.status == 401){
                 alert("Login Failed for Username and/or Password")
             } else {
-                this.props.history.push("/")
+                this.props.history.push("/home")
             }
         });
     }
+
 
     render() {
       return (

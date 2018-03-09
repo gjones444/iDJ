@@ -4,22 +4,27 @@
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "start": "nodemon server/server.js"
+    "start": "nodemon server/server.js",
+    "build": "webpack -w"
   },
   "dependencies": {
     "axios": "^0.17.1",
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.15.2",
     "connect-session-sequelize": "^5.2.0",
     "cookie-parser": "^1.4.3",
     "crypto-js": "^3.1.9-1",
+    "cryptojs": "^2.5.3",
     "express": "^4.14.0",
     "express-module": "^4.11.2",
     "express-session": "^1.15.6",
     "material-ui": "^0.20.0",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
+    "passport": "*",
+    "passport-local": "*",
     "pg": "^7.4.1",
+    "pg-hstore": "^2.3.2",
+    "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-player": "^1.2.1",
@@ -29,9 +34,11 @@
     "soundcloud": "^3.3.0"
   },
   "devDependencies": {
-    "babel-core": "^6.3.13",
-    "babel-loader": "^6.2.0",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13"
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1"
   }
 }

@@ -21,7 +21,7 @@ module.exports = function(passport) {
 		process.nextTick(function(){
 			models.User.findOne({where: {username: username}}).then(function(user){
 				if(!user)
-					return done(null, false, {message: 'no such user exists'});
+					return done(null, false, {message: 'Username Does not Exist'});
 		        if (!bcrypt.compareSync(password, user.get('password_hash'))){
 		          return done(null, false, {message: 'Incorrect Password. Try Again.'});
 		        }

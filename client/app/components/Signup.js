@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom';
 import Header from './Header';
 
 class Sign_up extends Component {
@@ -26,7 +26,7 @@ class Sign_up extends Component {
           credentials: 'same-origin'
       }).then((response) => response.json())
       .then((results) => {
-        // this.props.history.push("/log_in");
+        this.props.history.push("/");
         console.log(results)
       });
     } else {
