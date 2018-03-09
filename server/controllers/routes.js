@@ -1,7 +1,28 @@
+var pg = require('pg');
+var express = require('express');
+var path = require('path');
+var router = express.Router();
+var dbUrl;
+
+if(process.env.DATABASE_URL){
+	dbUrl = process.env.DATABASE_URL
+} else {
+	dbUrl = {
+		user: process.argv.POSTGRES_USER,
+		password: process.argv.POSTGRES_PASSWORD,
+		database: 'iDJ',
+		host: 'localhost',
+		port: 5432
+	}
+}
+
+var pgClient = new pg.Client(dbUrl);
+pgClient.connect();
+
 var path = require('path');
 
 var LocalStrategy = require('passport-local').Strategy;
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcrypt-nodejs');
 
 module.exports = (app, passport) => {
 
@@ -37,7 +58,7 @@ module.exports = (app, passport) => {
 		      	return next(err);
 		    }
 		    if (!user) {
-		    	return res.status(401).json({ success : false, message : 'authentication failed', info: info });
+		    	return res.json({ success : false, message : 'authentication failed', info: info });
 		    }
 		    req.login(user, function(err){
 				if(err){
@@ -62,10 +83,8 @@ module.exports = (app, passport) => {
 		});
 	});
 
-
-
 	app.get('/api/playlist/', (req,res) => {
-		var songs = `SELECT * FROM "added_songs"`;
+		var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC`;
 	  pgClient.query(songs, (error,queryRes) => {
 			if(error){
 				console.log("Did not work")
@@ -78,20 +97,36 @@ module.exports = (app, passport) => {
 
 
 	app.post('/api/add-song', (req,res) => {
-		console.log(req.body)
 		var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
 		pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count]);
+		var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
+	  pgClient.query(songs, (error,queryRes) => {
+			if(error){
+				console.log("Did not work")
+				res.json({error: error})
+			} else {
+				res.json({playlist: queryRes})
+			}
+		})
 	});
 
+
 	app.put('/api/vote-up-down/:id', (req,res) => {
-		console.log(req.body)
-	pgClient.query('UPDATE "added_songs" SET votes_count=$1 WHERE id=' + req.params.id, [req.body.votectn], (err,results) => {
+	pgClient.query('UPDATE "added_songs" SET votes_count=$1 WHERE id=' + req.params.id, [req.body.voteCtn], (err,results) => {
 		if(err){
 			res.json(err)
 		}
-		res.json({voteUpdated: "Success"})
-	});
-});
+		var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
+	  pgClient.query(songs, (error,queryRes) => {
+			if(error){
+				console.log("Did not work")
+				res.json({error: error})
+			} else {
+				res.json({playlist: queryRes})
+			}
+		})
+	})
+})
 
 
 	app.get('*', function(req,res){
