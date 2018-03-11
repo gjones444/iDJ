@@ -41,15 +41,14 @@ export default class Home extends Component {
     });
     
     {
-      axios({
-        method: 'get',
-        url: '/api/playlist/'
+      axios('/api/playlist/', {
+        method: 'Get',
         headers: {
           'content-type': 'application/json',
           'accept': 'application/json'
         },
         credentials: 'same-origin'
-        }).then((response) => {
+      })..then((response) => {
           console.log(response)
           this.setState({
             playlist_db: response.data.playlist.rows
