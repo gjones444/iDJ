@@ -45,6 +45,7 @@ export default class Home extends Component {
         method: 'get',
         url: '/api/playlist/'
         }).then((response) => {
+          console.log(response)
           this.setState({
             playlist_db: response.data.playlist.rows
           })
