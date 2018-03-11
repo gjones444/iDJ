@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var router = express.Router();
 var dbUrl;
+var models = require('./../models');
+models.sequelize.sync();
 
 if(process.env.DATABASE_URL){
 	dbUrl = process.env.DATABASE_URL
@@ -95,33 +97,46 @@ module.exports = (app, passport) => {
 	});
 
 	app.get('/api/playlist/', (req,res) => {
-		var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC`;
-	  pgClient.query(songs, (error,queryRes) => {
-			if(error){
-				return res.send();
-
-			} else {
-				res.json({playlist: queryRes})
-			}
-		});
+		models.Song.findAll({}).then(function(songs){
+			console.log(songs)
+		res.json(songs);
+	});
+		// var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC`;
+	  // pgClient.query(songs, (error,queryRes) => {
+		// 	if(error){
+		// 		return res.send();
+		//
+		// 	} else {
+		// 		res.json({playlist: queryRes})
+		// 	}
+		// });
 	});
 
 	app.post('/api/add-song', (req,res) => {
-		var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
-		pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count], (err,results) => {
-			if(err){
-				res.json(err)
-				return res.send();
-			}
-			var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
-		  pgClient.query(songs, (error,queryRes) => {
-				if(error){
-					res.json({error: error})
-				} else {
-					res.json({playlist: queryRes})
-				}
-			})
-		})
+		models.Song.create({
+			song: req.body.song,
+	    song_id: req.body.song_id,
+	    uri: req.body.uri,
+	    artwork: req.body.artwork,
+	    votes_count: req.body.votes_count,
+		}).then(function(message){
+			res.json(message);
+		});
+		// var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
+		// pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count], (err,results) => {
+		// 	if(err){
+		// 		res.json(err)
+		// 		return res.send();
+		// 	}
+		// 	var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
+		//   pgClient.query(songs, (error,queryRes) => {
+		// 		if(error){
+		// 			res.json({error: error})
+		// 		} else {
+		// 			res.json({playlist: queryRes})
+		// 		}
+		// 	})
+		// })
 	})
 
 	app.put('/api/vote-up-down/:id', (req,res) => {
