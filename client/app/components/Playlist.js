@@ -14,24 +14,13 @@ export default class Playlist extends Component {
     }
   }
 
-componentWillMount(){
-  // {
-  //   axios({
-  //     method: 'get',
-  //     url: '/api/playlist/'
-  //   }).then((response) => {
-  //         this.setState({
-  //           playlist_db: response.data.playlist.rows
-  //         })
-  //     })
-  // }
-  setTimeout(() => {
-    this.setState({
-      playlist_db: this.props.playlist_db
-    })
-  }, 100)
-  
-}
+  componentWillMount(){
+    setTimeout(() => {
+      this.setState({
+        playlist_db: this.props.playlist_db
+      })
+    }, 100)
+  }
 
   upVote(id){
     let playlist_db_item = this.props.playlist_db.filter(item => item.id == id)
@@ -74,8 +63,9 @@ componentWillMount(){
 
   render(){
     const {voteCtn, playlist_db} = this.state;
-    return(
+    return (
       <div className="Table-headers">
+        <table>
           <thead>
               <tr>
                 <th>Index</th>
@@ -86,12 +76,14 @@ componentWillMount(){
                 <th>Vote Count</th>
               </tr>
           </thead>
+        </table>
+        
       {
         this.props.playlist_db.length == playlist_db.length ?
           playlist_db.map((item, index) => {
               return (
                 <div key={index}>
-                  <table >
+                  <table>
                       <tbody>
                           <tr>
                             <td>{item.id}</td>
@@ -109,7 +101,7 @@ componentWillMount(){
             this.props.playlist_db.map((item, index) => {
                 return (
                   <div key={index}>
-                    <table >
+                    <table>
                         <tbody>
                             <tr>
                               <td>{item.id}</td>

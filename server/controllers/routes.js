@@ -83,11 +83,10 @@ module.exports = (app, passport) => {
 		});
 	});
 
-	app.get('/api/playlist/', (req,res) => {
-		var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC`;
+	app.delete('/api/remove-playlist', function (req, res) {
+		var songs = `DELETE * FROM "added_songs"`;
 	  pgClient.query(songs, (error,queryRes) => {
 			if(error){
-				console.log("Did not work")
 				res.json({error: error})
 			} else {
 				res.json({playlist: queryRes})
@@ -95,6 +94,16 @@ module.exports = (app, passport) => {
 		});
 	});
 
+	app.get('/api/playlist/', (req,res) => {
+		var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC`;
+	  pgClient.query(songs, (error,queryRes) => {
+			if(error){
+				res.json({error: error})
+			} else {
+				res.json({playlist: queryRes})
+			}
+		});
+	});
 
 	app.post('/api/add-song', (req,res) => {
 		var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
@@ -105,7 +114,6 @@ module.exports = (app, passport) => {
 			var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
 		  pgClient.query(songs, (error,queryRes) => {
 				if(error){
-					console.log("Did not work")
 					res.json({error: error})
 				} else {
 					res.json({playlist: queryRes})
@@ -131,6 +139,21 @@ module.exports = (app, passport) => {
 	})
 })
 
+	app.post('/api/sign-in', function(req, res) {
+	var queried = `SELECT * FROM users.username WHERE username='${req.body.user}'`;
+	pgClient.query(queried, (err, queryRes) => {
+	    if (req.body.user !== '' && req.body.pass !== '') {
+	      pgClient.query(queried, [req.body.user, req.body.pass], (err2, queryRes1) => {
+	        if (err2) {
+	          res.json(err2)
+	        } else {
+	          res.json(queryRes1)
+	        }
+	        console.log(queryRes1)
+	      });
+	    }
+	  })
+	})
 
 	app.get('*', function(req,res){
 		res.sendFile(path.join(__dirname, './../../client/public/index.html'));
