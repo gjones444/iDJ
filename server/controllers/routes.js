@@ -120,12 +120,10 @@ module.exports = (app, passport) => {
 	    artwork: req.body.artwork,
 	    votes_count: req.body.votes_count,
 		}).then(function(message){
-			res.json(message);
-		})
-
-		models.Song.findAll({}).then(function(songs){
-			console.log(songs)
-		res.json(songs);
+			models.Song.findAll({}).then(function(songs){
+				console.log(songs)
+				res.json(songs);
+			});
 		});
 		// var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
 		// pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count], (err,results) => {
@@ -150,8 +148,13 @@ module.exports = (app, passport) => {
 		songs.set('votes_count', req.body.voteCtn);
 		songs.save();
 	}).then(function(success){
-		console.log(success)
-		res.json({songs: "Vote Count Updated"})
+		models.Song.findAll({order: [
+            ['id', 'DESC']
+        ]}).then((songs) => {
+			res.json(songs);
+		})
+		// console.log(success)
+		// res.json({songs: "Vote Count Updated"})
 	})
 
 	// pgClient.query('UPDATE "added_songs" SET votes_count=$1 WHERE id=' + req.params.id, [req.body.voteCtn], (err,results) => {

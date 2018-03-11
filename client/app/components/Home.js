@@ -76,7 +76,7 @@ export default class Home extends Component {
         }).then((results) => {
           console.log("Song Added")
           this.setState({
-            playlist_db: results.data.playlist.rows
+            playlist_db: results.data
           });
         }) 
     }

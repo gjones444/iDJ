@@ -29,7 +29,7 @@ export default class Playlist extends Component {
       }).then((results) => {
         console.log(results)
         this.setState({
-          playlist_db: results.data.playlist.rows
+          playlist_db: results.data
         })
       })    
   }
@@ -39,8 +39,9 @@ export default class Playlist extends Component {
     axios.put('/api/vote-up-down/' + id,{
       voteCtn: playlist_db_item[0].votes_count - 1
       }).then((results) => {
+        console.log(results)
         this.setState({
-          playlist_db: results.data.playlist.rows
+          playlist_db: results.data
         })
       })    
   }
@@ -64,6 +65,7 @@ export default class Playlist extends Component {
 
   render(){
     const {voteCtn, playlist_db} = this.state;
+    console.log(this.state)
     return (
       <div className="Table-headers">
         <table>
