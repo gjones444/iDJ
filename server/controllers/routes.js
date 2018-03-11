@@ -98,8 +98,8 @@ module.exports = (app, passport) => {
 		var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC`;
 	  pgClient.query(songs, (error,queryRes) => {
 			if(error){
-				res.json({error: error})
 				return res.send();
+
 			} else {
 				res.json({playlist: queryRes})
 			}
