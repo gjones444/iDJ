@@ -99,6 +99,7 @@ module.exports = (app, passport) => {
 	  pgClient.query(songs, (error,queryRes) => {
 			if(error){
 				res.json({error: error})
+				return res.send();
 			} else {
 				res.json({playlist: queryRes})
 			}
@@ -109,6 +110,7 @@ module.exports = (app, passport) => {
 		var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
 		pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count], (err,results) => {
 			if(err){
+				res.json(err)
 				return res.send();
 			}
 			var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
