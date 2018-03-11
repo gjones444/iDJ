@@ -4,7 +4,7 @@
   "description": "",
   "main": "public/index.html",
   "scripts": {
-    "start": "nodemon server/server.js",
+    "start": "node server/server.js",
     "build": "webpack -w"
   },
   "dependencies": {
