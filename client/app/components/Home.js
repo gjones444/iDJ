@@ -45,7 +45,6 @@ export default class Home extends Component {
         method: 'GET',
         url: '/api/playlist/'
       }).then((songs) => {
-          console.log(songs)
           this.setState({
             playlist_db: songs.data
           })
@@ -75,7 +74,6 @@ export default class Home extends Component {
           artwork: addingSong.artwork_url,
           votes_count: 0
         }).then((results) => {
-          console.log(results)
           console.log("Song Added")
           this.setState({
             playlist_db: results.data.playlist.rows

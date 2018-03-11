@@ -121,6 +121,11 @@ module.exports = (app, passport) => {
 	    votes_count: req.body.votes_count,
 		}).then(function(message){
 			res.json(message);
+		})
+
+		models.Song.findAll({}).then(function(songs){
+			console.log(songs)
+		res.json(songs);
 		});
 		// var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
 		// pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count], (err,results) => {
@@ -140,20 +145,29 @@ module.exports = (app, passport) => {
 	})
 
 	app.put('/api/vote-up-down/:id', (req,res) => {
-	pgClient.query('UPDATE "added_songs" SET votes_count=$1 WHERE id=' + req.params.id, [req.body.voteCtn], (err,results) => {
-		if(err){
-			res.json(err)
-		}
-		var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
-	  pgClient.query(songs, (error,queryRes) => {
-			if(error){
-				console.log("Did not work")
-				res.json({error: error})
-			} else {
-				res.json({playlist: queryRes})
-			}
-		})
+		models.Song.findOne({ where: { id: req.params.id}}).then(function(songs){
+			console.log(songs)
+		songs.set('votes_count', req.body.voteCtn);
+		songs.save();
+	}).then(function(success){
+		console.log(success)
+		res.json({songs: "Vote Count Updated"})
 	})
+
+	// pgClient.query('UPDATE "added_songs" SET votes_count=$1 WHERE id=' + req.params.id, [req.body.voteCtn], (err,results) => {
+	// 	if(err){
+	// 		res.json(err)
+	// 	}
+	// 	var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
+	//   pgClient.query(songs, (error,queryRes) => {
+	// 		if(error){
+	// 			console.log("Did not work")
+	// 			res.json({error: error})
+	// 		} else {
+	// 			res.json({playlist: queryRes})
+	// 		}
+	// 	})
+	// })
 })
 
 	app.post('/api/sign-in', function(req, res) {
