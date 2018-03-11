@@ -97,7 +97,9 @@ module.exports = (app, passport) => {
 	});
 
 	app.get('/api/playlist/', (req,res) => {
-		models.Song.findAll({}).then(function(songs){
+		models.Song.findAll({order: [
+						['votes_count', 'ASC']
+				]}).then(function(songs){
 			console.log(songs)
 		res.json(songs);
 	});
@@ -120,7 +122,9 @@ module.exports = (app, passport) => {
 	    artwork: req.body.artwork,
 	    votes_count: req.body.votes_count,
 		}).then(function(message){
-			models.Song.findAll({}).then(function(songs){
+			models.Song.findAll({order: [
+	            ['votes_count', 'ASC']
+	        ]}).then(function(songs){
 				console.log(songs)
 				res.json(songs);
 			});
@@ -149,7 +153,7 @@ module.exports = (app, passport) => {
 		songs.save();
 	}).then(function(success){
 		models.Song.findAll({order: [
-            ['id', 'DESC']
+            ['votes_count', 'ASC']
         ]}).then((songs) => {
 			res.json(songs);
 		})
