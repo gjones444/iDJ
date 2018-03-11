@@ -44,6 +44,11 @@ export default class Home extends Component {
       axios({
         method: 'get',
         url: '/api/playlist/'
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json'
+        },
+        credentials: 'same-origin'
         }).then((response) => {
           console.log(response)
           this.setState({
