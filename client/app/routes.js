@@ -11,6 +11,7 @@ import Home from "./components/Home";
 import Playlist from "./components/Playlist";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import Logout from "./components/Logout";
 
 /*
 	this is where your routes are setup
@@ -24,5 +25,6 @@ export default (
     	<Route exact path="/" component={Login} />
       <Route path="/signup" component={Signup} />
       <Route path="/home" component={Home} />
+      <Route path="/logout" component={Logout} />
     </Switch>
 );

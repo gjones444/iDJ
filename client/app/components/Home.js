@@ -31,7 +31,6 @@ export default class Home extends Component {
       },
       credentials: 'same-origin'
     }).then((response) => response.json()).then((results) => {
-      console.log(results.user.username)
       if (results.message) {
         this.setState({user: results.user.username})
         if (results.message === "signed-in") {
@@ -54,6 +53,7 @@ export default class Home extends Component {
   
   searchSong(){
     let searchResult = this.refs.songSearch.value;
+    
     SC.get('/tracks/',{
 			q: searchResult,
       limit: 20
@@ -63,7 +63,7 @@ export default class Home extends Component {
         });
     })
   }
-  
+    
   addToPlaylist(id){
     let playlist_db_item = this.state.playlist_db.filter(item => item.id == id)
     let addingSong = this.state.songList[this.state.index]
@@ -80,40 +80,65 @@ export default class Home extends Component {
           });
         }) 
     }
+    
+    goPlay(){
+         SC.stream(('/tracks/' + this.state.playlist_db[0].song_id)).then(function(player){
+           player.play();
+         });
+    }
+    
+    
 
   render() {
     const {songList, index, voteIndex, playlist_db, signedIn, searchIndex} = this.state;
     const searchedSongs = () => {
       if(songList && songList.length > 0){
         return(
-          <div>
-          <span>
-            <li><img src={songList[0].artwork_url}></img>   Title: {songList[0].title} <button onClick={() => this.addToPlaylist()}>Add to playlist</button></li>      
-          </span>
-          </div>
+          // <div>
+          // <span>
+          //   <ui><img src={songList[0].artwork_url}></img>   Title: {songList[0].title} <button onClick={() => this.addToPlaylist()}><i class="material-icons">add_circle_outline</i></button></ui>      
+          // </span>
+          // </div>
+          //   
+            <div className="container scroll-search text-center">
+            {
+            songList.map((item, index) => {
+                return (  
+                      <div className="row">
+                        <div key={index}>
+                          <ui className="col s2"><img src={item.artwork_url}></img></ui> 
+                          <p className="col s4">Song Title: {item.title}</p>
+                          <button className="col s4" onClick={() => this.addToPlaylist()}><i class="material-icons text-center">add_circle_outline</i>Add To Playlist</button>     
+                        </div>
+                      </div>
+                  
+                )
+            })
+          }
+            </div>
         )
       }
     }
-    
-
+  
     return (
       <div>
         <Header/>
-        <p>User: {this.state.user}</p>
-        <div className="row">
-          <div className="input-field col s6">
+        <div className="row container">
+          <div className="input-field col s4">
+          <i className="red-text material-icons prefix">search</i>
             <input style={{
                 width: '50%'
-              }} type="text" onChange={this.searchSong.bind(this)} ref="songSearch" placeholder="Search"/>
+              }} type="text" onChange={this.searchSong.bind(this)} ref="songSearch" placeholder="Search" id="search-bar"/>
             <br>
             </br>
           </div>
         </div>
         <div>
+        {searchedSongs()}
       </div>
-          <div>
-            {searchedSongs()}
-            <p>Playlist Queue</p>
+          <div className="container">
+            <h3>Playlist Queue</h3>
+            <p><button onClick={this.goPlay.bind(this)} id="playBtn">Play</button></p>
             <Playlist playlist_db={this.state.playlist_db}/>
           </div>
       </div>

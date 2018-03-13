@@ -3,19 +3,44 @@ h1 {
 	color: blue;
 }
 
+td, th{
+	text-align: center;
+}
+
+#playBtn{
+
+}
+
 #table-style{
 	border-style: dashed;
 	color: red
 }
 
 .nav-wrapper{
-	background-color: orange
+	background-color: #2d8659
 }
 
 #register-btn {
 	background-color: gold
 }
 
-.Table-headers {
-	
+#Sign_up_div{
+	margin-top: 10%
+}
+
+#Log-in-div{
+	margin-top: 10%
+}
+
+.scroll-search{
+	overflow-x: scroll;
+	height: 200px
+}
+
+.brand-logo-login{
+	width:200px;
+	height:200px;
+	margin-left:70px;
+	margin-bottom: -50px;
+	padding: 0
 }

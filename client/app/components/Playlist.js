@@ -27,7 +27,6 @@ export default class Playlist extends Component {
     axios.put('/api/vote-up-down/' + id, {
       voteCtn: playlist_db_item[0].votes_count + 1
       }).then((results) => {
-        console.log(results)
         this.setState({
           playlist_db: results.data
         })
@@ -39,44 +38,23 @@ export default class Playlist extends Component {
     axios.put('/api/vote-up-down/' + id,{
       voteCtn: playlist_db_item[0].votes_count - 1
       }).then((results) => {
-        console.log(results)
         this.setState({
           playlist_db: results.data
         })
       })    
   }
 
-  goPlay(){
-       SC.stream(('/tracks/' + this.props.playlist_db[0].song_id)).then(function(player){
-         player.play();
-       });
-  }
-  
-  searchSong(){
-    let searchResult = this.refs.songSearch.value;
-    SC.get('/tracks/',{
-			q: searchResult
-		}).then((results) => {
-        this.setState({
-          songList: results
-        });
-    })
-  }
-
   render(){
     const {voteCtn, playlist_db} = this.state;
-    console.log(this.state)
     return (
       <div className="Table-headers">
         <table>
           <thead>
-              <tr>
-                <th>Index</th>
-                <th>Song Title</th>
-                <th>Vote Up</th>
-                <th>Vote Down</th>
-                <th>Play</th>
-                <th>Vote Count</th>
+              <tr className="row">
+                <th className="col s3">Song Title</th>
+                <th className="col s3">Vote Up</th>
+                <th className="col s3">Vote Down</th>
+                <th className="col s3">Vote Count</th>
               </tr>
           </thead>
         </table>
@@ -86,15 +64,13 @@ export default class Playlist extends Component {
           playlist_db.map((item, index) => {
               return (
                 <div key={index}>
-                  <table>
+                  <table className="highlight">
                       <tbody>
-                          <tr>
-                            <td>{item.id}</td>
-                            <td>{item.song}</td>
-                            <td><button onClick={() => this.upVote(item.id)}>Up</button></td>
-                            <td><button onClick={() => this.downVote(item.id)}>Down</button></td>
-                            <td><button onClick={this.goPlay.bind(this)}>Play</button></td>
-                            <td>{item.votes_count}</td>
+                          <tr className="row text-center">
+                            <td className="col s3">{item.song}</td>
+                            <td className="col s3"><button onClick={() => this.upVote(item.id)}><i className="material-icons">thumb_up</i></button></td>
+                            <td className="col s3"><button onClick={() => this.downVote(item.id)}><i className="material-icons">thumb_down</i></button></td>
+                            <td className="col s3">{item.votes_count}</td>
                           </tr>
                       </tbody>
                   </table>
@@ -106,12 +82,10 @@ export default class Playlist extends Component {
                   <div key={index}>
                     <table>
                         <tbody>
-                            <tr>
-                              <td>{item.id}</td>
+                            <tr className="text-center">
                               <td>{item.song}</td>
                               <td><button onClick={() => this.upVote(item.id)}>Up</button></td>
                               <td><button onClick={() => this.downVote(item.id)}>Down</button></td>
-                              <td><button onClick={this.goPlay.bind(this)}>Play</button></td>
                               <td>{item.votes_count}</td>
                             </tr>
                         </tbody>
@@ -120,6 +94,7 @@ export default class Playlist extends Component {
                 )
             }) : <div></div>
         }
+
       </div>
     )
   }

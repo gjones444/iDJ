@@ -35,21 +35,41 @@ class Sign_up extends Component {
   }
   render() {
     return (
-       <div className="text-center">
-       <Header/>
-         <h4>Enter Your New Username and Password Below</h4>
-        <div className="center-block" id="Sign_up_div">
-          <form id="sign-in-form" onSubmit={this.registration.bind(this)}>
-            <label>Username</label><br></br>
-            <input className="text-center" type="text" ref="username"/><br></br>
-            <label>Password</label><br></br>
-            <input className="text-center" type="password" ref="password"/><br></br>
-            <label>Confirm Password</label><br></br>
-            <input className="text-center" type="password" ref="confirmPassword"/><br></br>
-            <input id="register-btn"className="btn btn-warning" type="submit"/>
-          </form>
-      </div>
+      <div class="container">
+      <div class="row">
+          <div class="col s6 offset-s3 z-depth-1" id="Sign_up_div">
+          <a href="#"><img className="brand-logo-login center" src="https://image.ibb.co/bydmDS/logo.png" alt="Logo"/></a>
+            <h4 id="title" className="text-center">Register for iDJ</h4>
+            <p id="title">Enter your new credentials</p>            
+            <form id="sign-in-form" onSubmit={this.registration.bind(this)}>
+
+            <div class="input-field" id="username">
+              <input  type="text" class="validate" ref="username"/>
+              <label for="username">Username</label>
+          </div>
+          <div class="input-field" id="password">
+            <input  type="password" ref="password" class="validate"/>
+            <label for="password">Password</label>
         </div>
+        <div class="input-field" id="confirmPassword">
+          <input  type="password" ref="confirmPassword" class="validate"/>
+          <label for="password">Confirm Password</label>
+      </div>
+        <p>
+            <input type="checkbox" id="remember"/>
+            <label for="remember" id="checkbox" >Remember me</label>
+        </p>
+        <input className="waves-effect waves-light btn orange" type="submit" value="Register" id="Registerbtn"/>
+        <span><a href="/" className="waves-effect waves-light btn green">Sign In</a></span>
+        </form>
+
+        </div>
+      </div>
+
+    </div>
+      
+      
+       
     );
   }
 };
