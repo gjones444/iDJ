@@ -83,6 +83,7 @@ module.exports = (app, passport) => {
 		req.session.destroy(function(){
 			res.status(204).send();
 		});
+
 	});
 
 	app.delete('/api/remove-playlist', function (req, res) {
@@ -98,21 +99,12 @@ module.exports = (app, passport) => {
 
 	app.get('/api/playlist/', (req,res) => {
 		models.Song.findAll({order: [
-						['votes_count', 'ASC']
+						['votes_count', 'DESC']
 				]}).then(function(songs){
 			console.log(songs)
 		res.json(songs);
 	});
-		// var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC`;
-	  // pgClient.query(songs, (error,queryRes) => {
-		// 	if(error){
-		// 		return res.send();
-		//
-		// 	} else {
-		// 		res.json({playlist: queryRes})
-		// 	}
-		// });
-	});
+ 	});
 
 	app.post('/api/add-song', (req,res) => {
 		models.Song.create({
@@ -123,58 +115,25 @@ module.exports = (app, passport) => {
 	    votes_count: req.body.votes_count,
 		}).then(function(message){
 			models.Song.findAll({order: [
-	            ['votes_count', 'ASC']
+	            ['votes_count', 'DESC']
 	        ]}).then(function(songs){
 				console.log(songs)
 				res.json(songs);
 			});
 		});
-		// var insertQuery = 'INSERT INTO "added_songs" (song, song_id, uri, artwork, votes_count) VALUES ($1,$2,$3,$4,$5)';
-		// pgClient.query(insertQuery, [req.body.song, req.body.song_id, req.body.uri, req.body.artwork, req.body.votes_count], (err,results) => {
-		// 	if(err){
-		// 		res.json(err)
-		// 		return res.send();
-		// 	}
-		// 	var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
-		//   pgClient.query(songs, (error,queryRes) => {
-		// 		if(error){
-		// 			res.json({error: error})
-		// 		} else {
-		// 			res.json({playlist: queryRes})
-		// 		}
-		// 	})
-		// })
 	})
 
 	app.put('/api/vote-up-down/:id', (req,res) => {
-		models.Song.findOne({ where: { id: req.params.id}}).then(function(songs){
-			console.log(songs)
-		songs.set('votes_count', req.body.voteCtn);
-		songs.save();
-	}).then(function(success){
-		models.Song.findAll({order: [
-            ['votes_count', 'ASC']
-        ]}).then((songs) => {
-			res.json(songs);
-		})
-		// console.log(success)
-		// res.json({songs: "Vote Count Updated"})
+
+		models.Song.update({votes_count: req.body.voteCtn}, {where:{id: req.params.id}}).then(function(success){
+			models.Song.findAll({order: [
+	      ['votes_count', 'DESC']
+	    ]}).then((added_song) => {
+				console.log(added_song)
+				res.json(added_song);
+			})
 	})
 
-	// pgClient.query('UPDATE "added_songs" SET votes_count=$1 WHERE id=' + req.params.id, [req.body.voteCtn], (err,results) => {
-	// 	if(err){
-	// 		res.json(err)
-	// 	}
-	// 	var songs = `SELECT * FROM "added_songs" ORDER BY votes_count DESC` ;
-	//   pgClient.query(songs, (error,queryRes) => {
-	// 		if(error){
-	// 			console.log("Did not work")
-	// 			res.json({error: error})
-	// 		} else {
-	// 			res.json({playlist: queryRes})
-	// 		}
-	// 	})
-	// })
 })
 
 	app.post('/api/sign-in', function(req, res) {

@@ -5,7 +5,6 @@ import Playlist from './Playlist';
 import Header from './Header';
 import TableExampleSimple from './Playlist'
 
-
 export default class Home extends Component {
   constructor(props) {
       super(props);
@@ -65,8 +64,8 @@ export default class Home extends Component {
   }
     
   addToPlaylist(id){
-    let playlist_db_item = this.state.playlist_db.filter(item => item.id == id)
-    let addingSong = this.state.songList[this.state.index]
+    //let playlist_db_item = this.state.playlist_db.filter(item => item.song_id == id)[0]
+    let addingSong = this.state.songList.filter(item => item.id == id)[0];
       axios.post('/api/add-song', {
           song: addingSong.title,
           song_id: addingSong.id,
@@ -85,36 +84,27 @@ export default class Home extends Component {
          SC.stream(('/tracks/' + this.state.playlist_db[0].song_id)).then(function(player){
            player.play();
          });
-    }
-    
-    
+    }    
 
   render() {
     const {songList, index, voteIndex, playlist_db, signedIn, searchIndex} = this.state;
     const searchedSongs = () => {
       if(songList && songList.length > 0){
-        return(
-          // <div>
-          // <span>
-          //   <ui><img src={songList[0].artwork_url}></img>   Title: {songList[0].title} <button onClick={() => this.addToPlaylist()}><i class="material-icons">add_circle_outline</i></button></ui>      
-          // </span>
-          // </div>
-          //   
+        return(    
             <div className="container scroll-search text-center">
-            {
-            songList.map((item, index) => {
-                return (  
-                      <div className="row">
-                        <div key={index}>
-                          <ui className="col s2"><img src={item.artwork_url}></img></ui> 
-                          <p className="col s4">Song Title: {item.title}</p>
-                          <button className="col s4" onClick={() => this.addToPlaylist()}><i class="material-icons text-center">add_circle_outline</i>Add To Playlist</button>     
-                        </div>
-                      </div>
-                  
-                )
-            })
-          }
+                    {
+                    songList.map((item, index) => {
+                        return (  
+                              <div key={index} className="row">
+                                <div>
+                                  <ui className="col s2"><img src={item.artwork_url}></img></ui> 
+                                  <p className="col s4">Song Title: {item.title}</p>
+                                  <button className="col s4" onClick={() => this.addToPlaylist(item.id)}><i className="material-icons text-center">add_circle_outline</i>Add To Playlist</button>     
+                                </div>
+                              </div>            
+                               )
+                    })
+                  }
             </div>
         )
       }

@@ -24,9 +24,11 @@ export default class Playlist extends Component {
 
   upVote(id){
     let playlist_db_item = this.props.playlist_db.filter(item => item.id == id)
+    console.log(playlist_db_item[0]);
     axios.put('/api/vote-up-down/' + id, {
       voteCtn: playlist_db_item[0].votes_count + 1
       }).then((results) => {
+        console.log(results)
         this.setState({
           playlist_db: results.data
         })
@@ -82,11 +84,11 @@ export default class Playlist extends Component {
                   <div key={index}>
                     <table>
                         <tbody>
-                            <tr className="text-center">
-                              <td>{item.song}</td>
-                              <td><button onClick={() => this.upVote(item.id)}>Up</button></td>
-                              <td><button onClick={() => this.downVote(item.id)}>Down</button></td>
-                              <td>{item.votes_count}</td>
+                            <tr className="row text-center">
+                              <td className="col s3">{item.song}</td>
+                              <td className="col s3"><button onClick={() => this.upVote(item.id)}><i className="material-icons">thumb_up</i></button></td>
+                              <td className="col s3"><button onClick={() => this.downVote(item.id)}><i className="material-icons">thumb_down</i></button></td>
+                              <td className="col s3">{item.votes_count}</td>
                             </tr>
                         </tbody>
                     </table>
