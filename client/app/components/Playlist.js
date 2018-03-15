@@ -32,7 +32,7 @@ export default class Playlist extends Component {
         this.setState({
           playlist_db: results.data
         })
-      })    
+      })
   }
 
   downVote(id){
@@ -43,7 +43,7 @@ export default class Playlist extends Component {
         this.setState({
           playlist_db: results.data
         })
-      })    
+      })
   }
 
   render(){
@@ -60,7 +60,7 @@ export default class Playlist extends Component {
               </tr>
           </thead>
         </table>
-        
+
       {
         this.props.playlist_db.length == playlist_db.length ?
           playlist_db.map((item, index) => {
@@ -70,8 +70,8 @@ export default class Playlist extends Component {
                       <tbody>
                           <tr className="row text-center">
                             <td className="col s3">{item.song}</td>
-                            <td className="col s3"><button onClick={() => this.upVote(item.id)}><i className="material-icons">thumb_up</i></button></td>
-                            <td className="col s3"><button onClick={() => this.downVote(item.id)}><i className="material-icons">thumb_down</i></button></td>
+                            <td className="col s3"><button className="waves-effect waves-dark grey lighten-5" onClick={() => this.upVote(item.id)}><i className="material-icons">thumb_up</i></button></td>
+                            <td className="col s3"><button className="waves-effect waves-dark grey lighten-5" onClick={() => this.downVote(item.id)}><i className="material-icons">thumb_down</i></button></td>
                             <td className="col s3">{item.votes_count}</td>
                           </tr>
                       </tbody>

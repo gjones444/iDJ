@@ -8,6 +8,7 @@ export default class Nav extends Component {
     };
   }
   render() {
+    console.log(this.state.user)
     return (
       <nav>
     <div className="nav-wrapper">

@@ -37,7 +37,7 @@ export default class Home extends Component {
         }
       }
     });
-    
+
     {
       axios({
         method: 'GET',
@@ -48,23 +48,24 @@ export default class Home extends Component {
           })
         })
     };
+
+    alert('Welcome To iDJ. Use the search bar to add your song to the playlist. Remember to vote for the song to move it up or down in rank. Songs with the most votes will be played next.')
   }
-  
+
   searchSong(){
     let searchResult = this.refs.songSearch.value;
-    
+
     SC.get('/tracks/',{
 			q: searchResult,
-      limit: 20
+      limit: 50
 		}).then((results) => {
         this.setState({
           songList: results
         });
     })
   }
-    
+
   addToPlaylist(id){
-    //let playlist_db_item = this.state.playlist_db.filter(item => item.song_id == id)[0]
     let addingSong = this.state.songList.filter(item => item.id == id)[0];
       axios.post('/api/add-song', {
           song: addingSong.title,
@@ -77,31 +78,33 @@ export default class Home extends Component {
           this.setState({
             playlist_db: results.data
           });
-        }) 
+        })
     }
-    
+
     goPlay(){
          SC.stream(('/tracks/' + this.state.playlist_db[0].song_id)).then(function(player){
-           player.play();
+           if (player) {
+             player.play();
+           }
          });
-    }    
+    }
 
   render() {
     const {songList, index, voteIndex, playlist_db, signedIn, searchIndex} = this.state;
     const searchedSongs = () => {
       if(songList && songList.length > 0){
-        return(    
+        return(
             <div className="container scroll-search text-center">
                     {
                     songList.map((item, index) => {
-                        return (  
+                        return (
                               <div key={index} className="row">
                                 <div>
-                                  <ui className="col s2"><img src={item.artwork_url}></img></ui> 
-                                  <p className="col s4">Song Title: {item.title}</p>
-                                  <button className="col s4" onClick={() => this.addToPlaylist(item.id)}><i className="material-icons text-center">add_circle_outline</i>Add To Playlist</button>     
+                                  <ui className="col s3"><img src={item.artwork_url}></img></ui>
+                                  <p className="col s5">{item.title}</p>
+                                  <button className="waves-effect waves-light btn blue-grey col s2" onClick={() => this.addToPlaylist(item.id)}><i className="material-icons text-center">playlist_add</i></button>
                                 </div>
-                              </div>            
+                              </div>
                                )
                     })
                   }
@@ -109,16 +112,16 @@ export default class Home extends Component {
         )
       }
     }
-  
+
     return (
       <div>
         <Header/>
         <div className="row container">
-          <div className="input-field col s4">
+          <div >
           <i className="red-text material-icons prefix">search</i>
             <input style={{
                 width: '50%'
-              }} type="text" onChange={this.searchSong.bind(this)} ref="songSearch" placeholder="Search" id="search-bar"/>
+              }} type="text" onChange={this.searchSong.bind(this)} ref="songSearch" placeholder="Search by your favorite artist or song" id="search-bar"/>
             <br>
             </br>
           </div>
@@ -126,9 +129,8 @@ export default class Home extends Component {
         <div>
         {searchedSongs()}
       </div>
-          <div className="container">
-            <h3>Playlist Queue</h3>
-            <p><button onClick={this.goPlay.bind(this)} id="playBtn">Play</button></p>
+          <div className="container" id="playlist-area">
+            <h3>Playlist Queue  <button className="btn-floating btn-large waves-effect waves-light red" onClick={this.goPlay.bind(this)} id="playBtn"><i className="material-icons">play_arrow</i></button></h3>
             <Playlist playlist_db={this.state.playlist_db}/>
           </div>
       </div>

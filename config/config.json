@@ -2,7 +2,7 @@
   "development": {
     "username": "G.Funk",
     "password": null,
-    "database": "iDJ",
+    "database": "iDJ", 
     "host": "localhost",
     "dialect": "postgres"
   },
