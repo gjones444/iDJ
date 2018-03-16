@@ -3,7 +3,15 @@ import SC from 'soundcloud';
 import axios from 'axios';
 import Playlist from './Playlist';
 import Header from './Header';
-import TableExampleSimple from './Playlist'
+import TableExampleSimple from './Playlist';
+import Background from '../../public/images/home.jpg';
+import placeholder from '../../public/images/music-placeholder.png';
+
+var sectionStyle = {
+width: "100%",
+height: "100%",
+backgroundImage: "url(" + Background + ")"
+};
 
 export default class Home extends Component {
   constructor(props) {
@@ -17,6 +25,7 @@ export default class Home extends Component {
         user: undefined
       };
   }
+
 
   componentWillMount(){
     SC.initialize({
@@ -72,12 +81,15 @@ export default class Home extends Component {
           song_id: addingSong.id,
           uri: addingSong.uri,
           artwork: addingSong.artwork_url,
-          votes_count: 0
+          votes_count: 0,
         }).then((results) => {
           console.log("Song Added")
           this.setState({
             playlist_db: results.data
           });
+          // if (res[0].addingSong.artwork_url == null) {
+          //   res[0].addingSong.artwork_url = '../../public/images/music-placeholder.png'
+          // }
         })
     }
 
@@ -88,6 +100,8 @@ export default class Home extends Component {
            }
          });
     }
+
+
 
   render() {
     const {songList, index, voteIndex, playlist_db, signedIn, searchIndex} = this.state;
@@ -114,13 +128,13 @@ export default class Home extends Component {
     }
 
     return (
-      <div>
+       <div className="home">
         <Header/>
         <div className="row container">
           <div >
           <i className="red-text material-icons prefix">search</i>
             <input style={{
-                width: '50%'
+                width: '70%'
               }} type="text" onChange={this.searchSong.bind(this)} ref="songSearch" placeholder="Search by your favorite artist or song" id="search-bar"/>
             <br>
             </br>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import Header from './Header';
 import BGVideo from './BG-Video';
+import logo from '../../public/images/logo.png';
 
 
 class Sign_up extends Component {
@@ -42,8 +43,8 @@ class Sign_up extends Component {
       <div className="container">
       <BGVideo/>
         <div className="row" id="Sign_up_div">
-          <div className="col s6 offset-s3 z-depth-1">
-            <a href="#"><img className="brand-logo-login center" src="https://image.ibb.co/bydmDS/logo.png" alt="Logo"/></a>
+          <div className="col s6 offset-s3 z-depth-5">
+            <a href="#"><img className="brand-logo-login center" src={logo} alt="Logo"/></a>
             <h4 id="title" className="text-center">Register for iDJ</h4>
             <p id="title">Enter your new credentials</p>
             <form id="sign-in-form" onSubmit={this.registration.bind(this)}>

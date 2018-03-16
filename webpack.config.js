@@ -26,7 +26,13 @@ module.exports = {
           // These are the specific transformations we'll be using.
           presets: ["react", "es2015", 'stage-0']
         }
-      }
+      },
+      {
+       test: /\.(png|jpg|svg)$/,
+       use: {
+         loader: "url-loader",
+       },
+     },
     ]
   },
   resolve: {

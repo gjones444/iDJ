@@ -30,8 +30,9 @@
     "react-player": "^1.2.1",
     "react-router-dom": "^4.2.2",
     "react-soundplayer": "^1.0.4",
+    "react-transition-group": "^2.2.1",
     "sequelize": "^4.34.1",
-    "soundcloud": "^3.3.0" 
+    "soundcloud": "^3.3.0"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -39,6 +40,8 @@
     "babel-loader": "^6.4.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1"
+    "babel-preset-stage-0": "^6.24.1",
+    "file-loader": "^1.1.11",
+    "url-loader": "^1.0.1"
   }
 }

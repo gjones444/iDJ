@@ -4,6 +4,7 @@ import BGVideo from './BG-Video';
 import Header from './Header';
 import Logout from './Logout';
 import Home from './Home';
+import logo from '../../public/images/logo.png';
 
 export default class Log_in extends Component {
   constructor(props, context) {
@@ -40,8 +41,8 @@ export default class Log_in extends Component {
         <div className="container">
         <BGVideo/>
         <div className="row" id="Log-in-div">
-            <div className="col s6 offset-s3 z-depth-1" id="">
-            <a href="#"><img className="brand-logo-login center" src="https://image.ibb.co/bydmDS/logo.png" alt="Logo"/></a>
+            <div className="col s6 offset-s3 z-depth-5" id="">
+            <a href="#"><img className="brand-logo-login center" src={logo} alt="Logo"/></a>
               <h4 id="title" className="text-center">Welcome to iDJ</h4>
               <p id="title">Login Below</p>
               <form id="log-in-form" onSubmit={this.logInForm.bind(this)}>

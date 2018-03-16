@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "G.Funk",
-    "password": null,
-    "database": "iDJ", 
+    "username": "root",
+    "password": "root",
+    "database": "iDJ",
     "host": "localhost",
     "dialect": "postgres"
   },
